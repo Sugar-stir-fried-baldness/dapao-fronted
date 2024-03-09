@@ -33,13 +33,30 @@
       :items="tagList"
   />
 
+  <!-- Button -->
+
+  <van-button block type="primary" @click="doSearchResult" >搜索</van-button>
+
 
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import {useRouter} from "vue-router";
 
 const searchText = ref('');
+const router = useRouter();
+/**
+ * 执行搜索
+ */
+const doSearchResult = () =>{
+  router.push({
+    path: '/user/list',
+    query: {
+      tags: activeIds.value
+    }
+  })
+}
 
 const originTagList = [{
   text: '性别',
@@ -88,10 +105,11 @@ const activeIndex = ref(0);
 
 
 //关闭标签
-const  doclose = (tag) =>{
+const  doClose = (tag) =>{
   activeIds.value = activeIds.value.filter(item =>{
     return item !== tag;
   })
+
 
 }
 

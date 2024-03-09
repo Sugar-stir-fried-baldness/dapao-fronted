@@ -27,6 +27,8 @@ const user = {
 }
 
 const router = useRouter();
+
+
 const toEdit = (editKey : string , editName : string ,currentValue : string) => {
   router.push({
     path: '/user/edit',
@@ -37,6 +39,9 @@ const toEdit = (editKey : string , editName : string ,currentValue : string) => 
     }
   })
 }
+
+
+
 
 </script>
 
