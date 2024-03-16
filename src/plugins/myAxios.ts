@@ -11,7 +11,7 @@ myAxios.defaults.withCredentials = true;
 // 添加请求拦截器
 myAxios.interceptors.request.use(function (config) {
     // 在发送请求之前做些什么
-    console.log("请求发送了",config)
+    console.log("请求发送了111",config)
     return config;
 }, function (error) {
     // 对请求错误做些什么

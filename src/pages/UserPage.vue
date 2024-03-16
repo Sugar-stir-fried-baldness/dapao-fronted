@@ -20,6 +20,7 @@ import {useRouter} from "vue-router";
 import {onMounted, ref} from "vue";
 import myAxios from "../plugins/myAxios";
 import {showFailToast, showSuccessToast} from "vant";
+import {getCurrentUser} from "../services/user";
 
 
 // const user = {
@@ -36,22 +37,13 @@ import {showFailToast, showSuccessToast} from "vant";
 const user = ref();
 
 //钩子函数，它在组件挂载完成后执行 。发起一个GET请求到'/user/current'路径，获取当前用户的信息。
-onMounted(async () =>{
-  const res = await myAxios.get('/user/current');
-
-  if(res.code === 0){
-    user.value = res.data;
-    showSuccessToast('获取用户成功');
-  }else {
-    showFailToast('获取用户信息失败');
-  }
-
+onMounted(async () => {
+  user.value = await getCurrentUser();
 })
 
 const router = useRouter();
 
-
-const toEdit = (editKey : string , editName : string ,currentValue : string) => {
+const toEdit = (editKey: string, editName: string, currentValue: string) => {
   router.push({
     path: '/user/edit',
     query: {
@@ -61,10 +53,6 @@ const toEdit = (editKey : string , editName : string ,currentValue : string) => 
     }
   })
 }
-
-
-
-
 </script>
 
 <style scoped>

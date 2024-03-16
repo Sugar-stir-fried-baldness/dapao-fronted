@@ -16,14 +16,14 @@
 
 <script setup lang="ts">
 import {useRoute, useRouter} from "vue-router";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import myAxios from "../plugins/myAxios";
-import {showFailToast, showSuccessToast} from "vant";
+import {showFailToast, showSuccessToast, Toast} from "vant";
+import {getCurrentUser} from "../services/user";
 
 const route = useRoute();
 const router = useRouter();
 
-//编辑用户 的 参数
 const editUser = ref({
   editKey: route.query.editKey,
   currentValue: route.query.currentValue,
@@ -31,21 +31,26 @@ const editUser = ref({
 })
 
 const onSubmit = async () => {
-  const res = await myAxios.post('user/update' , {
-    'id':1,
-    [editUser.value.editKey ]:editUser.value.currentValue
-  })
-// todo
-  console.log(res,'更新请求')
-  //鱼皮写的 是res.code === 0  但是报错，我这样写是猜的
-  if(res.code === 0 && res.data > 0){
-    showSuccessToast('修改成功');
+  const currentUser = await getCurrentUser();
 
-    router.back();
-  }else{
-    showFailToast('修改失败');
+  if (!currentUser) {
+    showFailToast('用户未登录');
+    return;
   }
 
+  console.log(currentUser, '当前用户')
+
+  const res = await myAxios.post('/user/update', {
+    'id': currentUser.id,
+    [editUser.value.editKey as string]: editUser.value.currentValue,
+  })
+  console.log(res, '更新请求');
+  if (res.code === 0 && res.data > 0) {
+    showSuccessToast('修改成功');
+    router.back();
+  } else {
+    showFailToast('修改错误');
+  }
 };
 
 </script>
