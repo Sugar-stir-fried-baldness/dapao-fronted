@@ -1,20 +1,5 @@
 <template>
-  <van-card
-      v-for="user in userList"
-      :desc="`个人简介：${user.profile}`"
-      :title="`${user.username} (${user.planetCode})`"
-
-      :thumb="user.avatarUrl"
-  >
-    <template #tags>
-      <van-tag plain type="danger" v-for="tag in tags" style="margin-right: 8px; margin-top: 8px" >
-        {{tag}}
-      </van-tag>
-    </template>
-    <template #footer>
-      <van-button size="mini">联系我</van-button>
-    </template>
-  </van-card>
+  <user-card-list :user-list="userList"/>
   <van-empty v-if="!userList || userList.length < 1" description="搜索结果为空" />
 </template>
 
@@ -24,6 +9,7 @@ import {useRoute} from "vue-router";
 import myAxios from "../plugins/myAxios";
 import {showFailToast, showSuccessToast} from "vant";
 import qs from 'qs';
+import UserCardList from "../components/UserCardList.vue";
 
 
 const route = useRoute();
@@ -52,11 +38,16 @@ onMounted(async () => {
       })
   console.log(userListData)
   if (userListData) {
-    userListData.data.forEach(user => {
+    for (const user in userListData.data) {
       if (user.tags) {
         user.tags = JSON.parse(user.tags);
       }
-    })
+    }
+    // userListData.data.forEach(user => {
+    //   if (user.tags) {
+    //     user.tags = JSON.parse(user.tags);
+    //   }
+    // })
     userList.value = userListData;
   }
 })
